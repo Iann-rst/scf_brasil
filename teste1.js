@@ -1,25 +1,40 @@
 var data =  require("./fakeData");
 
+// Troquei o name por email, já que email será uma informação única
+
 const getUser = ( req, res, next ) => {
     
-    var name =  req.query.name;
+    var email =  req.query.email;
 
-    if(!name){
-        return res.send('Nome do usuário não foi informado!')
+    if(!email){
+        return res.status(400).send('Email do usuário não foi informado!')
     }
 
-    const user = data.find((user)=>user.name === name)
+    const user = data.find((user)=>user.email === email)
     
     if(!user){
-        return res.send('Usuário não encontrado!')
+        return res.status(404).send('Usuário não encontrado!')
     }
 
-    return res.send({user})
+    user.views++
+
+    return res.send(
+        {
+            ...user, 
+            password: undefined
+        }
+    )
 };
 
 const getUsers = ( req, res, next ) => {
     
-    res.send(data);
+    // Retornar as informações dos usuários e não retornar a senha
+    const users = data.map((user)=> ({
+            ...user, 
+            password: undefined
+        })
+    )
+    res.send(users);
     
 };
 
