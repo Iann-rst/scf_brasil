@@ -1,13 +1,25 @@
 var data =  require("./fakeData");
 
+// Atualizar os dados do usuário: nome e job
 module.exports =  function(req, res) {
   
     var id =  req.query.id;
 
-    const reg = data.find(d => id == id);
-    reg.name = req.body.name;
-    reg.job = req.body.job;
+    if(!id){
+        return res.status(400).send('ID do usuário não foi informado!')
+    }
 
-    res.send(reg);
+    const user = data.find((user) => user.id.toString() === id);
+
+    if(!user){
+        return res.status(404).send('Usuário não encontrado!')
+    }
+
+
+    user.name = req.body.name ? req.body.name : user.name;
+    user.job = req.body.job ? req.body.job : user.job;
+
+    console.log(user)
+    res.send(user);
 
 };
