@@ -4,12 +4,17 @@ const getUser = ( req, res, next ) => {
     
     var name =  req.query.name;
 
-    for(let i = 0; i < data.length;  i++) {
-        if(i.name == name) {
-            res.send(data[i]);
-        }
+    if(!name){
+        return res.send('Nome do usuário não foi informado!')
     }
 
+    const user = data.find((user)=>user.name === name)
+    
+    if(!user){
+        return res.send('Usuário não encontrado!')
+    }
+
+    return res.send({user})
 };
 
 const getUsers = ( req, res, next ) => {
