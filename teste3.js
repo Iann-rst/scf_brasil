@@ -1,15 +1,24 @@
 var data =  require("./fakeData");
 
+
+// Deletar um usuário pelo email
+
 module.exports = function(req, res) {
   
-    var name =  req.query.name;
+    var email =  req.query.email;
 
-    for(let i = 0; i < data.length;  i++) {
-        if(i.name == name) {
-            data[i] = null;
-        }
+    if(!email){
+        return res.status(400).send('Email do usuário não foi informado!')
     }
 
-    res.send("success");
+    const userIndex = data.findIndex((user)=>user.email === email)
+
+    if(userIndex=== -1){
+        return res.status(404).send('Usuário não encontrado.')
+    }
+
+    data.splice(userIndex, 1)
+
+    res.status(204).send();
 
 };
